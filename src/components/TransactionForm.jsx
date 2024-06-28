@@ -1,87 +1,96 @@
-import React, { useState } from 'react'
-import styles from '../styles/TransactionForm.module.css'
-import { useDispatch } from 'react-redux'
-import { nuevaTransaccion } from '../slices/TransactionSlice'
+import React, { useState } from 'react';
+import styles from '../styles/transactionForm.module.css';
+import { useDispatch } from 'react-redux';
+import { nuevaTransaccion } from '../slices/TransactionSlice';
+import { Button, DatePicker, Form, Input, Select, message } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { useForm } from 'antd/es/form/Form';
 
-export const TransactionForm = ({textButton}) => {
+export const TransactionForm = ({ textButton }) => {
+  const [form] = useForm();
+  const dateFormat = 'DD-MM-YYYY';
 
-    const categorias = [
-        'Alimentos', 'Trasporte', 'Contabilidad', 'Empleados'
-    ]
+  const dispatch = useDispatch();
 
-    const [fecha, setFecha] = useState('')
-    const [categoria, setCategoria] = useState('')
-    const [monto, setMonto] = useState('')
-    const [descripcion, setDescripcion] = useState('')
-    const [tipo, setTipo] = useState('')
+  const submitForm = (values) => {
+    const formattedDate = values.date.format(dateFormat);
 
-    const dispatch = useDispatch()
+    const transaction = {
+      id: Math.floor(Math.random() * 10000),
+      fecha: formattedDate,
+      categoria: values.category,
+      monto: values.amount,
+      descripcion: values.description,
+      tipo: values.type,
+    };
+    dispatch(nuevaTransaccion(transaction));
+    message.success('transacción agregada con éxito');
+    form.resetFields();
+  };
 
-    const submitForm = (e) => {
-        e.preventDefault()
+  const optionsCategory = [
+    { value: 'Alimentos' },
+    { value: 'Transporte' },
+    { value: 'Limpieza' },
+    { value: 'Servicios' },
+  ];
 
-        if (!fecha || !categoria || !monto || !descripcion || !tipo) {
-            return alert('Todos los campos son obligatorios')
-        }
-
-        const transaction = {
-            id: Math.floor(Math.random() * 10000),
-            fecha,
-            categoria,
-            monto,
-            descripcion,
-            tipo
-        }
-
-        console.log(transaction);
-
-        dispatch(nuevaTransaccion(transaction))
-        alert('Transacción agregada')
-
-        setFecha('')
-        setCategoria('')
-        setMonto('')
-        setDescripcion('')
-        setTipo('')
-    }
-
+  const optionsType = [{ value: 'Ingreso' }, { value: 'Egreso' }];
 
   return (
-    <form className={styles.container} onSubmit={submitForm}>
-        <div className={styles.inputContainer}>
-            <label htmlFor="">Fecha</label>
-            <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)}/>
-        </div>
-        <div className={styles.inputContainer}>
-            <label htmlFor="">Categoría</label>
-            <select name="categoria" id="" value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-                <option value="">Selecciona una categoría</option>
-                {
-                    categorias.map((cat, index)=>{
-                        return <option name="categoria" value={cat} key={index}>
-                            {cat}
-                        </option>
-                    })
-                }
-            </select>
-        </div>
-        <div className={styles.inputContainer}>
-            <label htmlFor="">Monto</label>
-            <input type="number"  value={monto} onChange={(e) => setMonto(e.target.value)}/>
-        </div>
-        <div className={styles.inputContainer}>
-            <label htmlFor="">Descripción</label>
-            <textarea type="text" value={descripcion} onChange={(e) => setDescripcion(e.target.value)}/>
-        </div>
-        <div className={styles.inputContainer}>
-            <label htmlFor="">Tipo</label>
-            <select name="tipoPago" id="" value={tipo} onChange={(e) => setTipo(e.target.value)}>
-                <option value="">Selecciona un item</option>
-                <option name='tipoPago' value='Pago'>Pago</option>
-                <option name='tipoPago' value='Ingreso'>Ingreso</option>
-            </select>
-        </div>
-        <button type='submit'>{textButton}</button>
-    </form>
-  )
-}
+    <div className={styles.formTransacction}>
+      <Form layout='vertical' onFinish={submitForm} form={form}>
+        <Form.Item
+          label='Fecha'
+          name='date'
+          rules={[{ required: true, message: 'Debe seleccionar una fecha' }]}
+        >
+          <DatePicker
+            style={{ width: '100%' }}
+            placeholder='Seleccione una fecha'
+            format={dateFormat}
+          />
+        </Form.Item>
+        <Form.Item
+          label='Categoría'
+          name='category'
+          initialValue={''}
+          rules={[
+            { required: true, message: 'Debe seleccionar una categoría' },
+          ]}
+        >
+          <Select options={optionsCategory} />
+        </Form.Item>
+        <Form.Item
+          label='Monto'
+          name='amount'
+          rules={[{ required: true, message: 'Debe seleccionar un monto' }]}
+        >
+          <Input type='number' />
+        </Form.Item>
+        <Form.Item
+          label='Descripción'
+          name='description'
+          rules={[{ required: true, message: 'Debe crear una descripción' }]}
+        >
+          <TextArea />
+        </Form.Item>
+        <Form.Item
+          label='Tipo de pago'
+          name='type'
+          initialValue={''}
+          rules={[
+            { required: true, message: 'Debe seleccionar un tipo de pago' },
+          ]}
+        >
+          <Select options={optionsType} />
+        </Form.Item>
+        <Form.Item>
+          <Button htmlType='submit' type='primary'>
+            {textButton}
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};

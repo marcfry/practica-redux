@@ -8,7 +8,7 @@ export const HomeScreen = () => {
     <div style={{display: 'flex', flexDirection: 'column', width: '100%', textAlign: 'center'}}>
         <h2>Nueva Transacción</h2>
 
-        <TransactionForm textButton='Nueva Transacción'/>
+        <TransactionForm textButton='Agregar Transacción'/>
     </div>
   )
 }
