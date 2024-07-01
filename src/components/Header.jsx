@@ -1,40 +1,41 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
+  RightCircleOutlined,
+  SearchOutlined,
+  TransactionOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 
 const items = [
   {
     label: 'Agregar Transacción',
-    key: 'addTransaction',
-    icon: <MailOutlined />,
+    key: '/',
+    icon: <TransactionOutlined />,
   },
   {
     label: 'Lista de Transacciones',
-    key: 'transactionList',
-    icon: <AppstoreOutlined />,
+    key: 'list',
+    icon: <UnorderedListOutlined />,
   },
   {
     label: 'Buscar',
     key: 'search',
-    icon: <SettingOutlined />,
+    icon: <SearchOutlined />,
   },
   {
     label: 'Resumen',
     key: 'resume',
-    icon: <SettingOutlined />,
+    icon: <RightCircleOutlined />,
   },
 ];
 export const Header = () => {
   const navigate = useNavigate();
 
-  const [current, setCurrent] = useState('mail');
+  const [current, setCurrent] = useState('/');
   const onClick = (e) => {
-    console.log('click ', e);
+    navigate(e.key);
     setCurrent(e.key);
   };
   return (

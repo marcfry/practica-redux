@@ -13,7 +13,7 @@ const AppRouter = () => {
       <Header />
         <Routes>
             <Route path='/' element={<HomeScreen />}/>
-            <Route path='/edit' element={<EditScreen />} />
+            <Route path='/list' element={<EditScreen />} />
             <Route path='/search' element={<SearchScreen />} />
             <Route path='/resume' element={<ResumeScreen />} />
         </Routes>
