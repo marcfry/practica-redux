@@ -33,7 +33,7 @@ const items = [
 export const Header = () => {
   const navigate = useNavigate();
 
-  const [current, setCurrent] = useState('/');
+  const [current, setCurrent] = useState();
   const onClick = (e) => {
     navigate(e.key);
     setCurrent(e.key);
@@ -41,6 +41,7 @@ export const Header = () => {
   return (
     <Menu
       onClick={onClick}
+      defaultSelectedKeys={['/']}
       selectedKeys={[current]}
       theme='dark'
       mode='horizontal'

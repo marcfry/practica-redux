@@ -93,11 +93,16 @@ export const TransactionForm = ({ textButton, dataToEdit, setFormSwitch }) => {
         >
           <Select options={optionsType} />
         </Form.Item>
-        <Form.Item>
-          <Button htmlType='submit' type='primary'>
-            {textButton}
-          </Button>
-        </Form.Item>
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          {dataToEdit && (
+            <Button onClick={() => setFormSwitch(false)}>Cancelar</Button>
+          )}
+          <Form.Item>
+            <Button htmlType='submit' type='primary'>
+              {textButton}
+            </Button>
+          </Form.Item>
+        </div>
       </Form>
     </div>
   );
