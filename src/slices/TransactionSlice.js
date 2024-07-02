@@ -7,14 +7,6 @@ const agregarDataStorage = (array) => {
   localStorage.setItem('transactions', JSON.stringify(array));
 };
 
-const searchTransactions = (transactions, searchString) => {
-  return transactions.filter((transaction) =>
-    Object.values(transaction).some((value) =>
-      String(value).toLowerCase().includes(searchString.toLowerCase())
-    )
-  );
-};
-
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState,
@@ -40,22 +32,6 @@ const transactionSlice = createSlice({
       agregarDataStorage(filterTransactions);
       return filterTransactions;
     },
-    buscarTransaccion: (state, action) => {
-      state.searchResults = initialState.filter((transaction) =>
-      Object.values(transaction).some((value) =>
-        String(value).toLowerCase().includes(action.payload.toLowerCase())
-      )
-    );
-  },
-        
-      // const searchResult = state.filter((transaction) =>
-      //   Object.values(transaction).some((value) =>
-      //     String(value).toLowerCase().includes(action.payload.toLowerCase())
-      //   )
-      // );
-      // console.log(searchResult)
-      // return searchResult;
-
   },
 });
 

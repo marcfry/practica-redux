@@ -4,7 +4,7 @@ import { TransactionForm } from '../components/TransactionForm';
 import { List, Row, Col, Typography, Button, Popconfirm } from 'antd';
 import { eliminarTransaccion } from '../slices/TransactionSlice';
 
-export const EditScreen = () => {
+export const EditScreen = ({resultSearch}) => {
   const [dataToEdit, setDataToEdit] = useState(null);
   const transacciones = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export const EditScreen = () => {
             </Col>
           </Row>
           <List
-            dataSource={transacciones}
+            dataSource={resultSearch?.length ? resultSearch :transacciones}
             renderItem={(item) => (
               <List.Item>
                 <Row gutter={16} style={{ width: '100%' }}>

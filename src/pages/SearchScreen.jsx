@@ -1,35 +1,46 @@
-import { Input } from 'antd'
-import React, { useState } from 'react'
-import styles from '../styles/searchTransaction.module.css'
-import { useDispatch, useSelector } from 'react-redux';
-import { buscarTransaccion } from '../slices/TransactionSlice';
+import { Input } from 'antd';
+import React, { useState } from 'react';
+import styles from '../styles/searchTransaction.module.css';
+import { useSelector } from 'react-redux';
+import { searcTransaction } from '../helpers/searchTransaction';
+import { EditScreen } from './EditScreen';
 
 export const SearchScreen = () => {
   const { Search } = Input;
-  const dispatch = useDispatch();
-  const [resultSearch, setResultSearch] = useState(null);
-  // const transacciones = useSelector((state) => state.transactions.searchResult);
+  const [resultSearch, setResultSearch] = useState([]);
+  const transactions = useSelector((state) => state.transactions);
+  const [isSearch, setIsSearch] = useState(false);
 
-  // console.log(transacciones)
+  const onSearch = (value) => {
+    if(!value){
+      return setResultSearch([]);
+    }
+    const findTransactions = searcTransaction(transactions, value);
+    setIsSearch(true);
+    setResultSearch(findTransactions);
+  };
 
-
-  const onSearch = (value, _e, info) => {
-    const findTransactions = dispatch(buscarTransaccion(value));
-    setResultSearch(findTransactions)
-  }
-  console.log(resultSearch)
   return (
-    <div style={{textAlign: 'center', width: '80%', marginTop: '32px'}}>
+    <div style={{ textAlign: 'center', width: '80%', marginTop: '32px' }}>
       <h2>Buscar transacción</h2>
       <div className={styles.searchTransaction}>
-      <Search
-      placeholder="Escriba para buscar la transacción"
-      allowClear
-      enterButton="Buscar"
-      size="large"
-      onSearch={onSearch}
-    />
+        <Search
+          placeholder='Escriba para buscar la transacción'
+          allowClear
+          enterButton='Buscar'
+          size='large'
+          onSearch={onSearch}
+        />
+      </div>
+      <div>
+        {resultSearch.length ? (
+          <EditScreen resultSearch={resultSearch} />
+        ) : isSearch ? (
+          <h4>No hay resultados para la búsqueda</h4>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
