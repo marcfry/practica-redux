@@ -81,7 +81,7 @@ export const TransactionForm = ({ textButton, dataToEdit, setFormSwitch }) => {
           initialValue={dataToEdit?.descripcion || ''}
           rules={[{ required: true, message: 'Debe crear una descripción' }]}
         >
-          <TextArea />
+          <TextArea rows={4} />
         </Form.Item>
         <Form.Item
           label='Tipo de pago'
